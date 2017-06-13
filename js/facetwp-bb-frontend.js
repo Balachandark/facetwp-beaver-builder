@@ -56,11 +56,5 @@
             FWP.template = 'wp';
         }
     });
-    // init triggers.
-    if (FWPBB.post_id) {
-        $('.fl-builder-content-' + FWPBB.post_id).on('fl-builder.layout-rendered', function () {
-            FWP.refresh();
-        });
-    }
 
 })(jQuery);

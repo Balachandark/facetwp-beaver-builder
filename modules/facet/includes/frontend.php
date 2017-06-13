@@ -7,3 +7,6 @@ if ( ! empty( $settings->title ) ) {
 echo facetwp_display( 'facet', $settings->facet );
 
 echo '</div>';
+if( FLBuilderModel::is_builder_active() ){
+	echo '<script>if( FWP ){ FWP.refresh(); }</script>';
+}
