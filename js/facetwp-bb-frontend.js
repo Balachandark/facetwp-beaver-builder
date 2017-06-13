@@ -2,24 +2,27 @@
 
     // Grids
     function init_grids() {
-        for (var i = 0; i < FWPBB.length; i++) {
-            new FLBuilderPostGrid(FWPBB[i]);
-            if (FWPBB[i].layout === 'grid') {
-                $('.fl-node-' + FWPBB[i].id + ' .fl-post-grid').masonry('reloadItems');
+        for (var i = 0; i < FWPBB.modules.length; i++) {
+            new FLBuilderPostGrid(FWPBB.modules[i]);
+            if (FWPBB.modules[i].layout === 'grid') {
+                $('.fl-node-' + FWPBB.modules[i].id + ' .fl-post-grid').masonry('reloadItems');
             }
         }
         clean_pager();
     }
 
     function clean_pager() {
-        $('a.page-numbers').attr('href', '');
+        $('a.page-numbers').attr('href', '').each(function () {
+            $(this).trigger('init');
+        });
     }
 
     // Pagination
-    $(document).on('click', 'a.page-numbers', function (e) {
+    $(document).on('click init', 'a.page-numbers', function (e) {
         e.preventDefault();
         var clicked = $(this),
-            page = clicked.text();
+            page = clicked.text(),
+            currentpage = FWP.paged;
         if (clicked.hasClass('prev')) {
             // previous.
             page = parseInt($('span.page-numbers.current').text()) - 1;
@@ -30,10 +33,16 @@
         }
         $('.page-numbers').removeClass('current');
         clicked.addClass('current');
-
-        FWP.paged = page;
-        FWP.soft_refresh = true;
-        FWP.refresh();
+        if (e.type === 'click') {
+            FWP.paged = page;
+            FWP.soft_refresh = true;
+            FWP.refresh();
+        } else {
+            //FWP.parse_facets();
+            FWP.facets['paged'] = page;
+            clicked.attr('href', '?' + FWP.build_query_string());
+            FWP.paged = currentpage;
+        }
     });
 
     // Set Trigger
@@ -42,4 +51,16 @@
             init_grids();
         }
     });
+    $(document).on('facetwp-refresh', function () {
+        if ($('.facetwp-template:first').hasClass('facetwp-bb-module')) {
+            FWP.template = 'wp';
+        }
+    });
+    // init triggers.
+    if (FWPBB.post_id) {
+        $('.fl-builder-content-' + FWPBB.post_id).on('fl-builder.layout-rendered', function () {
+            FWP.refresh();
+        });
+    }
+
 })(jQuery);

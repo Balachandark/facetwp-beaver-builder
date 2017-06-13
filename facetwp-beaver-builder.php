@@ -80,6 +80,7 @@ class FacetWP_BB_Integration {
 	 * Includes the custom FacetWP Modules.
 	 */
 	public function fwp_bb_modules() {
+		$this->grids = array();
 		if ( class_exists( 'FLBuilderModule' ) ) {
 			include_once FWPBB_PATH . 'modules/template/class-template.php';
 			include_once FWPBB_PATH . 'modules/facet/class-facet.php';
@@ -148,7 +149,7 @@ class FacetWP_BB_Integration {
 	 */
 	public function fwp_bb_add_template_class( $class, $module ) {
 		if ( isset( $module->settings->facetwp ) && 'enable' === $module->settings->facetwp ) {
-			$class .= ' facetwp-template';
+			$class .= ' facetwp-template facetwp-bb-module';
 		}
 
 		return $class;
@@ -193,8 +194,8 @@ class FacetWP_BB_Integration {
 
 		if ( ! empty( $query_vars['fl_builder_loop'] ) ) {
 			global $paged, $wp_the_query;
-			if ( ! empty( FWP()->ajax->url_vars['paged'] ) ) {
-				$paged = FWP()->ajax->url_vars['paged'];
+			if ( ! empty( $_GET['fwp_per_page'] ) ) {
+				$query_vars['posts_per_page'] = $_GET['fwp_per_page'];
 			}
 			if ( ! empty( $_GET['fwp_paged'] ) ) {
 				$paged = (int) $_GET['fwp_paged'];
@@ -204,7 +205,8 @@ class FacetWP_BB_Integration {
 				$wp_the_query->set( 'page', $paged );
 				$query_vars['paged'] = $paged;
 				// Get the paged offset.
-				$query_vars['offset'] = $query_vars['offset'] + ( ( $query_vars['paged'] - 1 ) * $query_vars['posts_per_page'] );
+				$query_vars['offset'] = ( $query_vars['paged'] - 1 ) * $query_vars['posts_per_page'];
+				//$query_vars['offset'] = 13;
 			}
 		}
 
@@ -221,8 +223,6 @@ class FacetWP_BB_Integration {
 	 * @return string
 	 */
 	public function fwp_bb_inject_js( $js, $nodes ) {
-
-		$this->grids = array();
 		foreach ( $nodes['modules'] as $module ) {
 			if ( empty( $module->settings->facetwp ) || 'disable' === $module->settings->facetwp ) {
 				continue;
@@ -263,7 +263,10 @@ class FacetWP_BB_Integration {
 	public function set_scripts() {
 		if ( ! empty( $this->grids ) ) {
 			wp_enqueue_script( 'facetwp-bb', FWPBB_URL . 'js/facetwp-bb-frontend.min.js', array( 'jquery' ), FWPBB_VER );
-			wp_localize_script( 'facetwp-bb', 'FWPBB', $this->grids );
+			wp_localize_script( 'facetwp-bb', 'FWPBB', array(
+				'post_id' => get_queried_object_id(),
+				'modules' => $this->grids,
+			) );
 		}
 	}
 
