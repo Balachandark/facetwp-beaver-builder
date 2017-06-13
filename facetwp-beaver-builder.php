@@ -56,7 +56,7 @@ class FacetWP_BB_Integration {
 		add_filter( 'fl_builder_loop_query', array( $this, 'fwp_bb_swapout_query_source' ), 10, 2 );
 		add_filter( 'fl_builder_loop_query_args', array( $this, 'fwp_bb_correct_pager' ) );
 		add_filter( 'fl_builder_render_js', array( $this, 'fwp_bb_inject_js' ), 100, 2 );
-		add_action( 'wp_footer', array( $this, 'set_scripts' ));
+		add_action( 'wp_footer', array( $this, 'set_scripts' ) );
 	}
 
 	/**
