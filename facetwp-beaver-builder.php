@@ -164,7 +164,7 @@ class FacetWP_BB_Integration {
 	 * @return \WP_Query
 	 */
 	public function fwp_bb_swapout_query_source( $query, $settings ) {
-		if ( 'fwp/' === substr( $settings->data_source, 0, 4 ) ) {
+		if ( isset( $settings->data_source ) && 'fwp/' === substr( $settings->data_source, 0, 4 ) ) {
 			$source    = substr( $settings->data_source, 4 );
 			$templates = FWP()->helper->get_templates();
 			foreach ( $templates as $template ) {
