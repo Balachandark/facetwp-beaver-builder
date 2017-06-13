@@ -220,30 +220,47 @@ class FacetWP_BB_Integration {
 	 *
 	 * @return string
 	 */
-
 	public function fwp_bb_inject_js( $js, $nodes ) {
 
 		$this->grids = array();
 		foreach ( $nodes['modules'] as $module ) {
-
-			if ( 'post-grid' === $module->slug ) {
-				$settings               = $module->settings;
-				$id                     = $module->node;
-				$this->grids[] = array(
-					'id'          => $id,
-					'layout'      => $settings->layout,
-					'pagination'  => $settings->pagination,
-					'postSpacing' => $settings->post_spacing,
-					'postWidth'   => $settings->post_width,
-					'matchHeight' => $settings->match_height,
-				);
+			if ( empty( $module->settings->facetwp ) || 'disable' === $module->settings->facetwp ) {
+				continue;
 			}
+			if ( 'post-grid' === $module->slug ) {
+				$this->catch_grid( $module );
+			}
+			// @todo add captures and support for other requested types.
+			//if ( 'other-type' === $module->slug ) {
+			//	$this->catch_type( $module );
+			//}
 		}
 
 		return $js;
 	}
 
-	public function set_scripts(){
+	/**
+	 * Capture settings for grid module.
+	 *
+	 * @param \FLBuilderModule $module The grid module object.
+	 */
+	public function catch_grid( $module ) {
+		$settings      = $module->settings;
+		$id            = $module->node;
+		$this->grids[] = array(
+			'id'          => $id,
+			'layout'      => $settings->layout,
+			'pagination'  => $settings->pagination,
+			'postSpacing' => $settings->post_spacing,
+			'postWidth'   => $settings->post_width,
+			'matchHeight' => (int) $settings->match_height,
+		);
+	}
+
+	/**
+	 * Enqueue and set script configs.
+	 */
+	public function set_scripts() {
 		if ( ! empty( $this->grids ) ) {
 			wp_enqueue_script( 'facetwp-bb', FWPBB_URL . 'js/facetwp-bb-frontend.min.js', array( 'jquery' ), FWPBB_VER );
 			wp_localize_script( 'facetwp-bb', 'FWPBB', $this->grids );
