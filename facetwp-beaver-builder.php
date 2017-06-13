@@ -224,19 +224,21 @@ class FacetWP_BB_Integration {
 	 * @return string
 	 */
 	public function fwp_bb_inject_js( $js, $nodes ) {
-		foreach ( $nodes['modules'] as $module ) {
-			if ( empty( $module->settings->facetwp ) || 'disable' === $module->settings->facetwp ) {
-				continue;
-			}
-			if ( 'post-grid' === $module->slug ) {
-				$this->catch_grid( $module );
-			}
-			// @todo add captures and support for other requested types.
-			//if ( 'other-type' === $module->slug ) {
-			//	$this->catch_type( $module );
-			//}
-		}
+		if( ! FLBuilderModel::is_builder_active() ) {
 
+			foreach ( $nodes['modules'] as $module ) {
+				if ( empty( $module->settings->facetwp ) || 'disable' === $module->settings->facetwp ) {
+					continue;
+				}
+				if ( 'post-grid' === $module->slug ) {
+					$this->catch_grid( $module );
+				}
+				// @todo add captures and support for other requested types.
+				//if ( 'other-type' === $module->slug ) {
+				//	$this->catch_type( $module );
+				//}
+			}
+		}
 		return $js;
 	}
 
