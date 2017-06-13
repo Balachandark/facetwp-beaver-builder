@@ -8,5 +8,5 @@ echo facetwp_display( 'facet', $settings->facet );
 
 echo '</div>';
 if( FLBuilderModel::is_builder_active() ){
-	echo '<script>if( FWP ){ FWP.refresh(); }</script>';
+	echo '<script>if( FWP ){ FWP.template = "wp"; FWP.extras.bb_node = jQuery(".facetwp-template").data("node");FWP.refresh(); }</script>';
 }

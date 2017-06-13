@@ -57,7 +57,21 @@ class FacetWP_BB_Integration {
 		add_filter( 'fl_builder_loop_query_args', array( $this, 'fwp_bb_correct_pager' ) );
 		add_filter( 'fl_builder_render_js', array( $this, 'fwp_bb_inject_js' ), 100, 2 );
 		add_action( 'wp_footer', array( $this, 'set_scripts' ) );
-		add_filter( 'facetwp_load_assets', array( 'FLBuilderModel', 'is_builder_active' ) );
+		add_filter( 'facetwp_load_assets', array( $this, 'is_builder_active' ) );
+	}
+
+	/**
+	 * Ensure that FacetWP assets load in builder.
+	 *
+	 * @since 1.0.0
+	 * @return  bool
+	 */
+	public function is_builder_active( $load ) {
+		if ( FLBuilderModel::is_builder_active() ) {
+			$load = true;
+		}
+
+		return $load;
 	}
 
 	/**
@@ -224,21 +238,19 @@ class FacetWP_BB_Integration {
 	 * @return string
 	 */
 	public function fwp_bb_inject_js( $js, $nodes ) {
-		if( ! FLBuilderModel::is_builder_active() ) {
-
-			foreach ( $nodes['modules'] as $module ) {
-				if ( empty( $module->settings->facetwp ) || 'disable' === $module->settings->facetwp ) {
-					continue;
-				}
-				if ( 'post-grid' === $module->slug ) {
-					$this->catch_grid( $module );
-				}
-				// @todo add captures and support for other requested types.
-				//if ( 'other-type' === $module->slug ) {
-				//	$this->catch_type( $module );
-				//}
+		foreach ( $nodes['modules'] as $module ) {
+			if ( empty( $module->settings->facetwp ) || 'disable' === $module->settings->facetwp ) {
+				continue;
 			}
+			if ( 'post-grid' === $module->slug ) {
+				$this->catch_grid( $module );
+			}
+			// @todo add captures and support for other requested types.
+			//if ( 'other-type' === $module->slug ) {
+			//	$this->catch_type( $module );
+			//}
 		}
+
 		return $js;
 	}
 
@@ -277,3 +289,12 @@ class FacetWP_BB_Integration {
 
 // init plugin.
 FacetWP_BB_Integration::init();
+
+
+add_filter( 'facetwp_inject_template', function ( $output ) {
+	ob_start();
+	var_dump( $_POST );
+
+	return ob_get_clean();
+}, 10, 2 );
+
