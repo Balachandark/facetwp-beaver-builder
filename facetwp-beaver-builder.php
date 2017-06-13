@@ -289,12 +289,3 @@ class FacetWP_BB_Integration {
 
 // init plugin.
 FacetWP_BB_Integration::init();
-
-
-add_filter( 'facetwp_inject_template', function ( $output ) {
-	ob_start();
-	var_dump( $_POST );
-
-	return ob_get_clean();
-}, 10, 2 );
-
