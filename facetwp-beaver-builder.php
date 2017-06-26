@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FacetWP - Beaver Builder
  * Description: FacetWP and Beaver Builder Integration
- * Version: 1.0
+ * Version: 1.0.1
  * Author: FacetWP, LLC
  * Author URI: https://facetwp.com/
  * License: GPLv2 or later
@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) or exit;
 // setup constants.
 define( 'FWPBB_PATH', plugin_dir_path( __FILE__ ) );
 define( 'FWPBB_URL', plugin_dir_url( __FILE__ ) );
-define( 'FWPBB_VER', '1.0' );
+define( 'FWPBB_VER', '1.0.1' );
 
 
 /**
@@ -46,7 +46,7 @@ class FacetWP_BB_Integration {
 	/**
 	 * Flag a BB custom query.
 	 *
-	 * @since   1.0.0
+	 * @since   1.0.1
 	 * @var     bool
 	 */
 	private $bb_facet_query = false;
@@ -72,7 +72,7 @@ class FacetWP_BB_Integration {
 	/**
 	 * Check if this query is beaver enabled.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 * @return  bool
 	 */
 	public function inspect_query( $is_main, $query  ) {
@@ -87,7 +87,7 @@ class FacetWP_BB_Integration {
 	/**
 	 * Check if this query is beaver enabled.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 * @return  bool
 	 */
 	public function check_query( $settings  ) {
