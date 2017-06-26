@@ -43,6 +43,13 @@ class FacetWP_BB_Integration {
 	 * @var     array
 	 */
 	private $grids;
+	/**
+	 * Flag a BB custom query.
+	 *
+	 * @since   1.0.0
+	 * @var     bool
+	 */
+	private $bb_facet_query = false;
 
 	/**
 	 * FacetWP_BB_Integration constructor.
@@ -58,8 +65,37 @@ class FacetWP_BB_Integration {
 		add_filter( 'fl_builder_render_js', array( $this, 'fwp_bb_inject_js' ), 100, 2 );
 		add_action( 'wp_footer', array( $this, 'set_scripts' ) );
 		add_filter( 'facetwp_load_assets', array( $this, 'is_builder_active' ) );
+		add_action( 'facetwp_is_main_query', array( $this, 'inspect_query' ),10, 2 );
+		add_filter( 'fl_builder_loop_before_query_settings', array( $this, 'check_query' ) );
 	}
 
+	/**
+	 * Check if this query is beaver enabled.
+	 *
+	 * @since 1.0.0
+	 * @return  bool
+	 */
+	public function inspect_query( $is_main, $query  ) {
+
+		if( true === $this->bb_facet_query && isset( $query->query['fl_builder_loop'] ) ){
+			$is_main = true;
+			$this->bb_facet_query = false;
+		}
+		return $is_main;
+	}
+
+	/**
+	 * Check if this query is beaver enabled.
+	 *
+	 * @since 1.0.0
+	 * @return  bool
+	 */
+	public function check_query( $settings  ) {
+		if( isset( $settings->facetwp ) && 'enable' === $settings->facetwp ){
+			$this->bb_facet_query = true;
+		}
+		return $settings;
+	}
 	/**
 	 * Ensure that FacetWP assets load in builder.
 	 *
