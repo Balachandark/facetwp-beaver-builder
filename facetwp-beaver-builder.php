@@ -1,20 +1,19 @@
 <?php
-
-/**
- * Plugin Name: FacetWP - Beaver Builder
- * Description: FacetWP and Beaver Builder Integration
- * Version: 1.0.1
- * Author: FacetWP, LLC
- * Author URI: https://facetwp.com/
- * License: GPLv2 or later
- **/
+/*
+Plugin Name: FacetWP - Beaver Builder
+Description: FacetWP and Beaver Builder Integration
+Version: 1.0.2
+Author: FacetWP, LLC
+Author URI: https://facetwp.com/
+GitHub URI: facetwp/facetwp-beaver-builder
+*/
 
 defined( 'ABSPATH' ) or exit;
 
 // setup constants.
 define( 'FWPBB_PATH', plugin_dir_path( __FILE__ ) );
 define( 'FWPBB_URL', plugin_dir_url( __FILE__ ) );
-define( 'FWPBB_VER', '1.0.1' );
+define( 'FWPBB_VER', '1.0.2' );
 
 
 /**
