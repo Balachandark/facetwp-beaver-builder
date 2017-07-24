@@ -67,6 +67,7 @@ class FacetWP_BB_Integration {
 		add_filter( 'facetwp_load_assets', array( $this, 'is_builder_active' ) );
 		add_action( 'facetwp_is_main_query', array( $this, 'inspect_query' ),10, 2 );
 		add_filter( 'fl_builder_loop_before_query_settings', array( $this, 'check_query' ) );
+		add_action( 'fl_builder_before_render_module', array( $this, 'catch_grid') );
 	}
 
 	/**
@@ -274,6 +275,7 @@ class FacetWP_BB_Integration {
 	 * @return string
 	 */
 	public function fwp_bb_inject_js( $js, $nodes ) {
+
 		foreach ( $nodes['modules'] as $module ) {
 			if ( empty( $module->settings->facetwp ) || 'disable' === $module->settings->facetwp ) {
 				continue;
@@ -281,6 +283,7 @@ class FacetWP_BB_Integration {
 			if ( 'post-grid' === $module->slug ) {
 				$this->catch_grid( $module );
 			}
+
 			// @todo add captures and support for other requested types.
 			//if ( 'other-type' === $module->slug ) {
 			//	$this->catch_type( $module );
@@ -312,8 +315,10 @@ class FacetWP_BB_Integration {
 	 * Enqueue and set script configs.
 	 */
 	public function set_scripts() {
+
 		if ( ! empty( $this->grids ) ) {
-			wp_enqueue_script( 'facetwp-bb', FWPBB_URL . 'js/facetwp-bb-frontend.min.js', array( 'jquery' ), FWPBB_VER );
+
+			wp_enqueue_script( 'facetwp-bb', FWPBB_URL . 'js/facetwp-bb-frontend.js', array( 'jquery' ), FWPBB_VER );
 			wp_localize_script( 'facetwp-bb', 'FWPBB', array(
 				'post_id' => get_queried_object_id(),
 				'modules' => $this->grids,
