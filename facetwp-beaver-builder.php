@@ -33,7 +33,6 @@ class FacetWP_BB_Integration {
         add_filter( 'fl_builder_module_custom_class', array( $this, 'add_template_class' ), 10, 2 );
         add_filter( 'fl_builder_render_settings_field', array( $this, 'add_source' ), 10, 2 );
         add_filter( 'fl_builder_render_module_settings', array( $this, 'add_facetwp_toggle' ), 10, 2 );
-        //add_filter( 'fl_builder_render_js', array( $this, 'inject_js' ), 100, 2 );
         add_filter( 'fl_builder_loop_query_args', array( $this, 'loop_query_args' ) );
         add_filter( 'facetwp_is_main_query', array( $this, 'is_main_query' ), 10, 2 );
         add_filter( 'facetwp_load_assets', array( $this, 'load_assets' ) );
@@ -168,6 +167,7 @@ class FacetWP_BB_Integration {
             $offset = ( 1 < $paged ) ? ( ( $paged - 1 ) * $per_page ) : 0;
 
             $GLOBALS['wp_the_query']->set( 'page', $paged );
+            $GLOBALS['wp_the_query']->set( 'paged', $paged );
             $query_vars['paged'] = $paged;
             $query_vars['offset'] = $offset;
             $query_vars['facetwp'] = true;
@@ -184,19 +184,6 @@ class FacetWP_BB_Integration {
     function store_module_settings( $settings ) {
         $this->settings = $settings;
     }
-
-
-    /*
-    function inject_js( $js, $nodes ) {
-        foreach ( $nodes['modules'] as $module ) {
-            if ( 'post-grid' === $module->slug ) { // post grid module
-                $this->catch_grid( $module );
-            }
-        }
-
-        return $js;
-    }
-    */
 
 
     /**
