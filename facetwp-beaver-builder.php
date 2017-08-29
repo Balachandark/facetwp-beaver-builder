@@ -2,7 +2,7 @@
 /*
 Plugin Name: FacetWP - Beaver Builder
 Description: FacetWP and Beaver Builder Integration
-Version: 1.0.2
+Version: 1.0.2.1
 Author: FacetWP, LLC
 Author URI: https://facetwp.com/
 GitHub URI: facetwp/facetwp-beaver-builder
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) or exit;
 // setup constants.
 define( 'FWPBB_PATH', plugin_dir_path( __FILE__ ) );
 define( 'FWPBB_URL', plugin_dir_url( __FILE__ ) );
-define( 'FWPBB_VER', '1.0.2' );
+define( 'FWPBB_VER', '1.0.2.1' );
 
 
 class FacetWP_BB_Integration {
@@ -33,7 +33,7 @@ class FacetWP_BB_Integration {
         add_filter( 'fl_builder_module_custom_class', array( $this, 'add_template_class' ), 10, 2 );
         add_filter( 'fl_builder_render_settings_field', array( $this, 'add_source' ), 10, 2 );
         add_filter( 'fl_builder_render_module_settings', array( $this, 'add_facetwp_toggle' ), 10, 2 );
-        add_filter( 'fl_builder_render_js', array( $this, 'inject_js' ), 100, 2 );
+        //add_filter( 'fl_builder_render_js', array( $this, 'inject_js' ), 100, 2 );
         add_filter( 'fl_builder_loop_query_args', array( $this, 'loop_query_args' ) );
         add_filter( 'facetwp_is_main_query', array( $this, 'is_main_query' ), 10, 2 );
         add_filter( 'facetwp_load_assets', array( $this, 'load_assets' ) );
@@ -186,9 +186,7 @@ class FacetWP_BB_Integration {
     }
 
 
-    /**
-     * @TODO Is this method needed? If so, when?
-     */
+    /*
     function inject_js( $js, $nodes ) {
         foreach ( $nodes['modules'] as $module ) {
             if ( 'post-grid' === $module->slug ) { // post grid module
@@ -198,6 +196,7 @@ class FacetWP_BB_Integration {
 
         return $js;
     }
+    */
 
 
     /**
