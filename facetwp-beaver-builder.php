@@ -71,6 +71,10 @@ class FacetWP_BB_Integration {
             $is_main_query = (bool) $query->query_vars['facetwp'];
         }
 
+        if ( 'fl-builder-template' == $query->get( 'post_type' ) ) {
+            $is_main_query = false;
+        }
+
         return $is_main_query;
     }
 
