@@ -2,6 +2,9 @@ var FWPBB = FWPBB || {};
 
 (function($) {
 
+    // Prevent BB scroll
+    FLBuilderLayout._scrollToElement = function(element, callback) { }
+
     // Grids
     FWPBB.init_grids = function() {
         $.each(FWPBB.modules, function(id, obj) {
