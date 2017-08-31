@@ -142,25 +142,25 @@ class FacetWP_BB_Integration {
      */
     function loop_query_args( $query_vars ) {
 
-        // Exit if FacetWP support is disabled
-        if ( empty( $this->settings->facetwp ) || 'disable' === $this->settings->facetwp ) {
+        // Exit if not the builder
+        if ( empty( $query_vars['fl_builder_loop' ] ) ) {
             return $query_vars;
         }
 
-        // Main builder loop?
-        if ( ! empty( $query_vars['fl_builder_loop'] ) ) {
-            $source = isset( $this->settings->data_source ) ? $this->settings->data_source : '';
+        $is_enabled = isset( $this->settings->facetwp ) && 'enable' === $this->settings->facetwp;
+        $source = isset( $this->settings->data_source ) ? $this->settings->data_source : '';
+        $is_fwp_query = ( 0 === strpos( $source, 'fwp/' ) );
 
-            // FacetWP template
-            if ( 0 === strpos( $source, 'fwp/' ) ) {
+        if ( $is_enabled || $is_fwp_query ) {
+            if ( $is_fwp_query ) {
 
-                $source = substr( $this->settings->data_source, 4 );
-                $template = FWP()->helper->get_template_by_name( $source );
+                // Grab the template by name
+                $template = FWP()->helper->get_template_by_name( substr( $source, 4 ) );
 
                 if ( false !== $template ) {
-                    $query_args = preg_replace( "/\xC2\xA0/", ' ', $template['query'] );
-                    $query_args = (array) eval( '?>' . $query_args );
-                    $query_vars = array_merge( $query_vars, $query_args );
+                    $args = preg_replace( "/\xC2\xA0/", ' ', $template['query'] );
+                    $args = (array) eval( '?>' . $args );
+                    $query_vars = array_merge( $query_vars, $args );
                 }
             }
 
@@ -174,7 +174,10 @@ class FacetWP_BB_Integration {
             $GLOBALS['wp_the_query']->set( 'paged', $paged );
             $query_vars['paged'] = $paged;
             $query_vars['offset'] = $offset;
-            $query_vars['facetwp'] = true;
+
+            if ( $is_enabled ) {
+                $query_vars['facetwp'] = true;
+            }
         }
 
         return $query_vars;
