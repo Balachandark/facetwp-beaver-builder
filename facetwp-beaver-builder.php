@@ -218,7 +218,7 @@ class FacetWP_BB_Integration {
      */
     function set_scripts() {
         if ( ! empty( $this->grids ) ) {
-            wp_enqueue_script( 'facetwp-bb', FWPBB_URL . 'js/facetwp-bb-frontend.js', array( 'jquery' ), FWPBB_VER );
+            wp_enqueue_script( 'facetwp-bb', FWPBB_URL . 'js/front.js', array( 'jquery' ), FWPBB_VER );
             wp_localize_script( 'facetwp-bb', 'FWPBB', array(
                 'post_id' => get_queried_object_id(),
                 'modules' => $this->grids,
