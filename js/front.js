@@ -25,16 +25,15 @@ var FWPBB = FWPBB || {};
     // Pagination
     $(document).on('click init', 'a.page-numbers', function(e) {
         e.preventDefault();
-        var clicked = $(this),
-            page = clicked.text(),
-            currentpage = FWP.paged;
+        var clicked = $(this);
+        var page = clicked.text();
 
         if (clicked.hasClass('prev')) { // previous
-            page = parseInt($('span.page-numbers.current').text()) - 1;
+            page = FWP.settings.pager.page - 1;
         }
 
         if (clicked.hasClass('next')) { // next
-            page = parseInt($('span.page-numbers.current').text()) + 1;
+            page = FWP.settings.pager.page + 1;
         }
 
         $('.page-numbers').removeClass('current');
@@ -48,7 +47,6 @@ var FWPBB = FWPBB || {};
         else {
             FWP.facets['paged'] = page;
             clicked.attr('href', '?' + FWP.build_query_string());
-            FWP.paged = currentpage;
         }
     });
 
