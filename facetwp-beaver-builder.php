@@ -32,10 +32,15 @@ class FacetWP_BB_Integration {
 
         add_filter( 'fl_builder_module_custom_class', array( $this, 'add_template_class' ), 10, 2 );
         add_filter( 'fl_builder_render_settings_field', array( $this, 'add_source' ), 10, 2 );
-        add_filter( 'fl_builder_render_module_settings', array( $this, 'add_facetwp_toggle' ), 10, 2 );
         add_filter( 'fl_builder_loop_query_args', array( $this, 'loop_query_args' ) );
         add_filter( 'facetwp_is_main_query', array( $this, 'is_main_query' ), 10, 2 );
         add_filter( 'facetwp_load_assets', array( $this, 'load_assets' ) );
+
+        // 1.x
+        add_filter( 'fl_builder_render_module_settings', array( $this, 'add_facetwp_toggle' ), 10, 2 );
+
+        // 2.x
+        add_filter( 'fl_builder_register_settings_form', array( $this, 'add_facetwp_toggle' ), 10, 2 );
     }
 
 
@@ -107,8 +112,11 @@ class FacetWP_BB_Integration {
      * Add a FacetWP toggle for post grid modules
      */
     function add_facetwp_toggle( $form, $instance ) {
-        if ( 'post-grid' === $instance->slug ) {
 
+        // v2 sends the slug, v1 sends the full instance
+        $slug = isset( $instance->slug ) ? $instance->slug : $instance;
+
+        if ( 'post-grid' == $slug ) {
             $form['layout']['sections']['general']['fields']['facetwp'] = array(
                 'type'    => 'select',
                 'label'   => __( 'FacetWP', 'fl-builder' ),
