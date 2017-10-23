@@ -8,8 +8,8 @@ var FWPBB = FWPBB || {};
     // Grids
     FWPBB.init_grids = function() {
         $.each(FWPBB.modules, function(id, obj) {
-            new FLBuilderPostGrid(obj);
             if ('grid' === obj.layout) {
+                new FLBuilderPostGrid(obj);
                 $('.fl-node-' + id + ' .fl-post-grid').masonry('reloadItems');
             }
         });

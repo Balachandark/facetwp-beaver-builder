@@ -107,7 +107,9 @@ class FacetWP_BB_Integration {
      * Add a FacetWP toggle for post grid modules
      */
     function add_facetwp_toggle( $form, $id ) {
-        if ( 'post-grid' == $id || 'pp-content-grid' == $id ) {
+        $supported = array( 'post-grid', 'pp-content-grid' );
+
+        if ( in_array( $id, $supported ) ) {
             $form['layout']['sections']['general']['fields']['facetwp'] = array(
                 'type'    => 'select',
                 'label'   => __( 'FacetWP', 'fl-builder' ),
@@ -201,12 +203,13 @@ class FacetWP_BB_Integration {
 
         if ( isset( $settings->facetwp ) && 'enable' == $settings->facetwp ) {
             $this->grids[ $id ] = array(
-                'id'          => $id,
-                'layout'      => $settings->layout,
-                'pagination'  => $settings->pagination,
-                'postSpacing' => $settings->post_spacing,
-                'postWidth'   => $settings->post_width,
-                'matchHeight' => (int) $settings->match_height,
+                'id'            => $id,
+                'type'          => $settings->type,
+                'layout'        => $settings->layout,
+                'pagination'    => $settings->pagination,
+                'postSpacing'   => $settings->post_spacing,
+                'postWidth'     => $settings->post_width,
+                'matchHeight'   => (int) $settings->match_height,
             );
         }
     }

@@ -1,12 +1,14 @@
 <?php
 
 echo '<div class="facetwp-bb-module">';
-if ( ! empty( $settings->title ) ) {
-	echo '<h4 class="facettp-facet-title">' . esc_html( $settings->title ) . '</h4>';
-}
-echo facetwp_display( 'facet', $settings->facet );
 
+if ( ! empty( $settings->title ) ) {
+	echo '<h4 class="facetwp-facet-title">' . esc_html( $settings->title ) . '</h4>';
+}
+
+echo facetwp_display( 'facet', $settings->facet );
 echo '</div>';
-if( FLBuilderModel::is_builder_active() ){
-	echo '<script>if( FWP ){ FWP.template = "wp"; FWP.extras.bb_node = jQuery(".facetwp-template").data("node");FWP.refresh(); }</script>';
+
+if ( FLBuilderModel::is_builder_active() ) {
+	echo '<script>if ( FWP ) { FWP.template = "wp"; FWP.extras.bb_node = jQuery(".facetwp-template").data("node");FWP.refresh(); }</script>';
 }
