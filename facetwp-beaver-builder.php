@@ -2,7 +2,7 @@
 /*
 Plugin Name: FacetWP - Beaver Builder
 Description: FacetWP and Beaver Builder Integration
-Version: 1.0.6
+Version: 1.0.7
 Author: FacetWP, LLC
 Author URI: https://facetwp.com/
 GitHub URI: facetwp/facetwp-beaver-builder
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) or exit;
 // setup constants.
 define( 'FWPBB_PATH', plugin_dir_path( __FILE__ ) );
 define( 'FWPBB_URL', plugin_dir_url( __FILE__ ) );
-define( 'FWPBB_VER', '1.0.6' );
+define( 'FWPBB_VER', '1.0.7' );
 
 
 class FacetWP_BB_Integration {
