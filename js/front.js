@@ -52,7 +52,7 @@ var FWPBB = FWPBB || {};
 
     // Set Trigger
     $(document).on('facetwp-loaded', function() {
-        if (FWP.loaded) {
+        if (FWP.loaded || FWP.is_bfcache) {
             FWPBB.init_grids();
         }
     });
