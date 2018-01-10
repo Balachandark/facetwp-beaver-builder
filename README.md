@@ -1,2 +1,2 @@
 # FacetWP - Beaver Builder Integration
-Documentation coming soon :)
+Project page: https://facetwp.com/add-ons/beaver-builder-integration/
