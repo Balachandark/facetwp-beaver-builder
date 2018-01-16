@@ -201,16 +201,40 @@ class FacetWP_BB_Integration {
         $settings = $module->settings;
         $id = $module->node;
 
+        //echo '<pre>';var_dump($module);echo '</pre>';
+
         if ( isset( $settings->facetwp ) && 'enable' == $settings->facetwp ) {
-            $this->grids[ $id ] = array(
-                'id'            => $id,
-                'type'          => $settings->type,
-                'layout'        => $settings->layout,
-                'pagination'    => $settings->pagination,
-                'postSpacing'   => $settings->post_spacing,
-                'postWidth'     => $settings->post_width,
-                'matchHeight'   => (int) $settings->match_height,
-            );
+            if ( 'post-grid' == $module->slug ) {
+                $options = array(
+                    'id'            => $id,
+                    'layout'        => $settings->layout,
+                    'pagination'    => $settings->pagination,
+                    'postSpacing'   => $settings->post_spacing,
+                    'postWidth'     => $settings->post_width,
+                    'matchHeight'   => (int) $settings->match_height,
+                );
+            }
+            elseif ( 'pp-content-grid' == $module->slug ) {
+                $options = array(
+                    'id'            => $id,
+                    'layout'        => $settings->layout,
+                    'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+                    'perPage'       => $settings->posts_per_page,
+                    'fields'        => json_encode( $settings ),
+                    'pagination'    => $settings->pagination,
+                    'postSpacing'   => $settings->post_spacing,
+                    'postColumns'   => $settings->post_grid_count,
+                    'matchHeight'   => $settings->match_height,
+                    'filters'       => false,
+                );
+
+                if ( 'grid' == $settings->layout && 'no' == $settings->match_height ) {
+                    $options['masonry'] = 'yes';
+                }
+            }
+
+            $options['type'] = $settings->type;
+            $this->grids[ $id ] = $options;
         }
     }
 

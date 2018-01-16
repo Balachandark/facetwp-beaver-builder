@@ -9,8 +9,13 @@ var FWPBB = FWPBB || {};
     FWPBB.init_grids = function() {
         $.each(FWPBB.modules, function(id, obj) {
             if ('grid' === obj.layout) {
-                new FLBuilderPostGrid(obj);
-                $('.fl-node-' + id + ' .fl-post-grid').masonry('reloadItems');
+                if ('post-grid' === obj.type) {
+                    new FLBuilderPostGrid(obj);
+                    $('.fl-node-' + id + ' .fl-post-grid').masonry('reloadItems');
+                }
+                else if ('pp-content-grid' === obj.type) {
+                    new PPContentGrid(obj);
+                }
             }
         });
         clean_pager();
