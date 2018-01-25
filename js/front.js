@@ -16,6 +16,9 @@ var FWPBB = FWPBB || {};
                 else if ('pp-content-grid' === obj.type) {
                     new PPContentGrid(obj);
                 }
+                else if ('blog-posts' === obj.type) {
+                    new UABBBlogPosts(obj);
+                }
             }
         });
         clean_pager();

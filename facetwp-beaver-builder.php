@@ -107,10 +107,21 @@ class FacetWP_BB_Integration {
      * Add a FacetWP toggle for post grid modules
      */
     function add_facetwp_toggle( $form, $id ) {
+
         $supported = array( 'post-grid', 'pp-content-grid' );
 
         if ( in_array( $id, $supported ) ) {
             $form['layout']['sections']['general']['fields']['facetwp'] = array(
+                'type'    => 'select',
+                'label'   => __( 'FacetWP', 'fl-builder' ),
+                'default' => 'disable',
+                'options' => array(
+                    'disable' => __( 'Disabled', 'fl-builder' ),
+                    'enable'  => __( 'Enable', 'fl-builder' ),
+                ),
+            );
+        } else if ( 'blog-posts' === $id  ) {
+            $form['general']['sections']['general']['fields']['facetwp'] = array(
                 'type'    => 'select',
                 'label'   => __( 'FacetWP', 'fl-builder' ),
                 'default' => 'disable',
@@ -231,6 +242,24 @@ class FacetWP_BB_Integration {
                 if ( 'grid' == $settings->layout && 'no' == $settings->match_height ) {
                     $options['masonry'] = 'yes';
                 }
+            } elseif ( 'blog-posts' == $module->slug ) {
+                $options = array(
+                    'id'                        => $id,
+                    'pagination'                => $settings->pagination,
+                    'is_carousel'               => $settings->is_carousel,
+                    'postSpacing'               => $settings->element_space,
+                    'desktop'                   => $settings->post_per_grid_desktop,
+                    'medium'                    => $settings->post_per_grid_medium,
+                    'small'                     => $settings->post_per_grid_small,
+                    'slidesToScroll'            => $settings->slides_to_scroll,
+                    'prevArrow'                 => $settings->icon_left,
+                    'nextArrow'                 => $settings->icon_right,
+                    'autoplaySpeed'             => $settings->animation_speed,
+                    'equal_height_box'          => $settings->equal_height_box,
+                    'uabb_masonary_filter_type' => $settings->filter_type,
+                    'mesonry_equal_height'      => $settings->mesonry_equal_height,
+                    'blog_image_position'       => $settings->blog_image_position,
+                );
             }
 
             $options['type'] = $settings->type;
