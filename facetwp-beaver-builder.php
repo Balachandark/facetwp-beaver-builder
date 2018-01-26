@@ -26,7 +26,6 @@ class FacetWP_BB_Integration {
     function __construct() {
 
         add_action( 'init', array( $this, 'register_modules' ), 30 );
-        add_action( 'fl_builder_loop_before_query', array( $this, 'store_module_settings' ) );
         add_action( 'fl_builder_before_render_module', array( $this, 'catch_grid') );
         add_action( 'wp_footer', array( $this, 'set_scripts' ) );
 
@@ -67,8 +66,8 @@ class FacetWP_BB_Integration {
      * Use the current query?
      */
     function is_main_query( $is_main_query, $query ) {
-        if ( isset( $query->query_vars['facetwp'] ) ) {
-            $is_main_query = (bool) $query->query_vars['facetwp'];
+        if ( '' !== $query->get( 'facetwp' ) ) {
+            $is_main_query = (bool) $query->get( 'facetwp' );
         }
 
         if ( 'fl-builder-template' == $query->get( 'post_type' ) ) {
@@ -141,15 +140,17 @@ class FacetWP_BB_Integration {
      * Override query arguments
      * Source: "custom_query" or "fwp/<template_name>"
      */
-    function loop_query_args( $query_vars ) {
+    function loop_query_args( $args ) {
 
         // Exit if not the builder
-        if ( empty( $query_vars['fl_builder_loop' ] ) ) {
-            return $query_vars;
+        if ( empty( $args['fl_builder_loop' ] ) ) {
+            return $args;
         }
 
-        $is_enabled = isset( $this->settings->facetwp ) && 'enable' === $this->settings->facetwp;
-        $source = isset( $this->settings->data_source ) ? $this->settings->data_source : '';
+        $settings = $args['settings'];
+
+        $is_enabled = isset( $settings->facetwp ) && 'enable' === $settings->facetwp;
+        $source = isset( $settings->data_source ) ? $settings->data_source : '';
         $is_fwp_query = ( 0 === strpos( $source, 'fwp/' ) );
 
         if ( $is_enabled || $is_fwp_query ) {
@@ -161,36 +162,27 @@ class FacetWP_BB_Integration {
                 if ( false !== $template ) {
                     $args = preg_replace( "/\xC2\xA0/", ' ', $template['query'] );
                     $args = (array) eval( '?>' . $args );
-                    $query_vars = array_merge( $query_vars, $args );
+                    $args = array_merge( $args, $args );
                 }
             }
 
             // Set paged and offset
             $prefix = FWP()->helper->get_setting( 'prefix', 'fwp_' );
             $paged = isset( $_GET[ $prefix . 'paged' ] ) ? (int) $_GET[ $prefix . 'paged' ] : 1;
-            $per_page = isset( $query_vars['posts_per_page'] ) ? (int) $query_vars['posts_per_page'] : 10;
+            $per_page = isset( $args['posts_per_page'] ) ? (int) $args['posts_per_page'] : 10;
             $offset = ( 1 < $paged ) ? ( ( $paged - 1 ) * $per_page ) : 0;
 
             $GLOBALS['wp_the_query']->set( 'page', $paged );
             $GLOBALS['wp_the_query']->set( 'paged', $paged );
-            $query_vars['paged'] = $paged;
-            $query_vars['offset'] = $offset;
+            $args['paged'] = $paged;
+            $args['offset'] = $offset;
 
             if ( $is_enabled ) {
-                $query_vars['facetwp'] = true;
+                $args['facetwp'] = true;
             }
         }
 
-        return $query_vars;
-    }
-
-
-    /**
-     * Use this hook since the "fl_builder_loop_query_args" hook
-     * doesn't pass the $settings object
-     */
-    function store_module_settings( $settings ) {
-        $this->settings = $settings;
+        return $args;
     }
 
 
