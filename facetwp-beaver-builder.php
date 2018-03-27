@@ -256,7 +256,6 @@ class FacetWP_BB_Integration {
                     'nextArrow'                 => $settings->icon_right,
                     'autoplaySpeed'             => $settings->animation_speed,
                     'equal_height_box'          => $settings->equal_height_box,
-                    'uabb_masonary_filter_type' => $settings->filter_type,
                     'mesonry_equal_height'      => $settings->mesonry_equal_height,
                     'blog_image_position'       => $settings->blog_image_position,
                 );
