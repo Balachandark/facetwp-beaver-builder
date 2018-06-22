@@ -82,7 +82,10 @@ class FacetWP_BB_Integration {
      * Load assets for BB builder preview
      */
     function load_assets( $load ) {
-        return FLBuilderModel::is_builder_active() ? true : $load;
+        if ( class_exists( 'FLBuilderModel' ) ) {
+            return FLBuilderModel::is_builder_active() ? true : $load;
+        }
+        return $load;
     }
 
 
