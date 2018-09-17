@@ -171,7 +171,10 @@ class FacetWP_BB_Integration {
 
             // Set paged and offset
             $prefix = FWP()->helper->get_setting( 'prefix', 'fwp_' );
-            $paged = isset( $_GET[ $prefix . 'paged' ] ) ? (int) $_GET[ $prefix . 'paged' ] : 1;
+            $paged_var = isset( $_GET[ $prefix . 'paged' ] ) ? (int) $_GET[ $prefix . 'paged' ] : 1;
+            $load_more_var = isset( $_GET[ $prefix . 'load_more' ] ) ? (int) $_GET[ $prefix . 'load_more' ] : false;
+
+            $paged = $load_more_var ? $load_more_var : $paged_var;
             $per_page = isset( $args['posts_per_page'] ) ? (int) $args['posts_per_page'] : 10;
             $offset = ( 1 < $paged ) ? ( ( $paged - 1 ) * $per_page ) : 0;
 
@@ -179,6 +182,12 @@ class FacetWP_BB_Integration {
             $GLOBALS['wp_the_query']->set( 'paged', $paged );
             $args['paged'] = $paged;
             $args['offset'] = $offset;
+
+            // Support "Load more"
+            if ( isset( FWP()->ajax->is_preload ) && true === FWP()->ajax->is_preload && $is_load_more ) {
+                $args['posts_per_page'] = $paged * $per_page;
+                $args['offset'] = 0;
+            }
 
             if ( $is_enabled ) {
                 $args['facetwp'] = true;
