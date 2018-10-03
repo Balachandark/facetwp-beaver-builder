@@ -184,7 +184,7 @@ class FacetWP_BB_Integration {
             $args['offset'] = $offset;
 
             // Support "Load more"
-            if ( isset( FWP()->ajax->is_preload ) && true === FWP()->ajax->is_preload && $is_load_more ) {
+            if ( isset( FWP()->ajax->is_preload ) && true === FWP()->ajax->is_preload && $load_more_var ) {
                 $args['posts_per_page'] = $paged * $per_page;
                 $args['offset'] = 0;
             }
