@@ -20,6 +20,13 @@ var FWPBB = FWPBB || {};
                     new UABBBlogPosts(obj);
                 }
             }
+            else if ('gallery' == obj.layout) {
+                new FLBuilderPostGrid(obj);
+
+                $('.fl-post-gallery-img').each(function() {
+                    $(this)[0].style.setProperty('max-width', '100%', 'important');
+                });
+            }
         });
         clean_pager();
     }
