@@ -109,7 +109,6 @@ class FacetWP_BB_Integration {
      * Add a FacetWP toggle for post grid modules
      */
     function add_facetwp_toggle( $form, $id ) {
-
         $supported = array( 'post-grid', 'pp-content-grid' );
 
         if ( in_array( $id, $supported ) ) {
