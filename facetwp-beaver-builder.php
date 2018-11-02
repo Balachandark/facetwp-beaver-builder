@@ -107,22 +107,18 @@ class FacetWP_BB_Integration {
 
     /**
      * Add a FacetWP toggle for post grid modules
+     *
+     * post-grid = BB core
+     * pp-content-grid = PowerPack
+     * blog-posts = UABB
      */
     function add_facetwp_toggle( $form, $id ) {
-        $supported = array( 'post-grid', 'pp-content-grid' );
+        $supported = array( 'post-grid', 'pp-content-grid', 'blog-posts' );
 
         if ( in_array( $id, $supported ) ) {
-            $form['layout']['sections']['general']['fields']['facetwp'] = array(
-                'type'    => 'select',
-                'label'   => __( 'FacetWP', 'fl-builder' ),
-                'default' => 'disable',
-                'options' => array(
-                    'disable' => __( 'Disabled', 'fl-builder' ),
-                    'enable'  => __( 'Enable', 'fl-builder' ),
-                ),
-            );
-        } else if ( 'blog-posts' === $id  ) {
-            $form['general']['sections']['general']['fields']['facetwp'] = array(
+            $parent = ( 'blog-posts' == $id ) ? 'general' : 'layout';
+
+            $form[ $parent ]['sections']['general']['fields']['facetwp'] = array(
                 'type'    => 'select',
                 'label'   => __( 'FacetWP', 'fl-builder' ),
                 'default' => 'disable',
